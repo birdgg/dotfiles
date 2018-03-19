@@ -13,14 +13,15 @@ values."
    ;; If non-nil layers with lazy install support are lazy installed.
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
-   dotspacemacs-configuration-layer-path '()
+   dotspacemacs-configuration-layer-path '("~/dotfiles/spacemacs/.spacemacs.d/layers")
    dotspacemacs-configuration-layers
    '(
      yaml
      markdown
      purescript
      javascript
-     react
+     myreact
+     ;; react
      latex
      (haskell :variables haskell-completion-backend 'intero)
      ivy
@@ -83,7 +84,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '("Iosevka"
                                :size 13
                                :weight normal
                                :width normal)
