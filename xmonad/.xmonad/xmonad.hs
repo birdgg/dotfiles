@@ -59,7 +59,7 @@ main = do
   xmonad
     $ withUrgencyHook NoUrgencyHook
     $ ewmh
-    $ addDescrKeys ((myModMask, xK_F1), xMessage) myKeys
+    $ addDescrKeys' ((myModMask, xK_F1), xMessage) myKeys
     $ myConfig { logHook = dynamicLogWithPP (myLogHook dbus) }
 
 -----------------------------------------------------------------------------}}}
@@ -194,6 +194,13 @@ myKeys conf = let
     subKeys "Spawnables"
     [ ("M-<Return>" , addName "Terminal"         $ spawn myTerminal)
     , ("M-b"        , addName "Browser"          $ spawn myBrowser)
+    ]
+
+    ^++^
+    subKeys "Actions"
+    [
+      ("M-p"         , addName "Take a screenshot of the current workspace"   $ spawn "~/.xmonad/scripts/xshot.sh")
+    , ("M-S-p"       , addName "Take a screenshot of the selected area"       $ spawn "~/.xmonad/scripts/xshot-select.sh")
     ]
 
 
