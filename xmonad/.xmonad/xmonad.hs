@@ -1,5 +1,3 @@
--- IMPORT                                                                    {{{
---------------------------------------------------------------------------------
 import XMonad
 
 import XMonad.Actions.CycleWS
@@ -59,7 +57,7 @@ main = do
   xmonad
     $ withUrgencyHook NoUrgencyHook
     $ ewmh
-    $ addDescrKeys' ((myModMask, xK_F1), xMessage) myKeys
+    $ addDescrKeys ((myModMask, xK_F1), xMessage) myKeys
     $ myConfig { logHook = dynamicLogWithPP (myLogHook dbus) }
 
 -----------------------------------------------------------------------------}}}
@@ -256,6 +254,7 @@ myAddSpaces len str = sstr ++ replicate (len - length sstr) ' '
 --------------------------------------------------------------------------------
 myStartupHook = do
   setWMName "LG3D"
+  spawn "fcitx"
   spawn "feh --bg-scale $HOME/Downloads/bg.jpg"
   spawn "$HOME/.config/polybar/launch.sh"
   spawn "compton -b --config $HOME/.config/compton.conf"
