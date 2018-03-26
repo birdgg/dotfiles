@@ -28,6 +28,11 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 
 import XMonad.Prompt
+import XMonad.Prompt.ConfirmPrompt
+import XMonad.Prompt.Pass
+import XMonad.Prompt.Shell
+import XMonad.Prompt.Window
+import XMonad.Prompt.Workspace
 
 import qualified DBus as D
 import qualified DBus.Client as D
@@ -64,6 +69,7 @@ main = do
 -- GLOBAL VARIABLES                                                          {{{
 --------------------------------------------------------------------------------
 -- General config
+myEditor       = "emacs"
 myTerminal     = "urxvt"
 myModMask      = mod4Mask
 myBorderWidth  = 1
@@ -101,28 +107,17 @@ blue2     = "#2266d0"
 -- Font
 myFont = "xft:SpaceMono Nerd Font Mono:" ++ "fontformat=truetype:size=10:antialias=true"
 
+fullDim = 12*2
+
 -----------------------------------------------------------------------------}}}
 -- LAYOUT                                                                    {{{
 --------------------------------------------------------------------------------
-myLayouts = renamed [CutWordsLeft 1] . avoidStruts . minimize . B.boringWindows $ perWS
-
--- layout per workspace
-perWS = onWorkspace wsGEN my3FT $
-        onWorkspace wsWRK myAll $
-        onWorkspace wsMED my3FT $
-        onWorkspace wsTMP myFTM $
-        myAll -- all layouts for all other workspaces
-
-
-myFT  = myTile ||| myFull
-myFTM = myTile ||| myFull ||| myMagn
-my3FT = myTile ||| myFull ||| my3cmi
-myAll = myTile ||| myFull ||| my3cmi ||| myMagn
+myLayouts = renamed [CutWordsLeft 1] . avoidStruts . minimize . B.boringWindows $ myFull ||| myTile
 
 myFull = renamed [Replace "Full"] $ spacing 0 $ noBorders Full
 myTile = renamed [Replace "Main"] $ spacing mySpacing $ Tall 1 (3/100) (1/2)
-my3cmi = renamed [Replace "3Col"] $ spacing mySpacing $ ThreeColMid 1 (3/100) (1/2)
-myMagn = renamed [Replace "Mag"]  $ noBorders $ limitWindows 3 $ magnifiercz' 1.4 $ FixedColumn 1 20 80 10
+
+
 
 -----------------------------------------------------------------------------}}}
 -- THEMES                                                                    {{{
@@ -136,7 +131,7 @@ myPromptTheme = def
   , bgHLight          = pur2
   , borderColor       = pur2
   , promptBorderWidth = 0
-  , height            = prompt
+  , height            = fullDim
   , position          = Top
   }
 
@@ -156,9 +151,9 @@ coldPromptTheme = myPromptTheme
 -- WORKSPACES                                                                {{{
 --------------------------------------------------------------------------------
 wsGEN = "\xf120"
-wsWRK = "\xf268"
+wsWRK = "\xe926"
 wsMED = "\xf001"
-wsTMP = "\xf2db"
+wsTMP = "\xf086"
 
 myWorkspaces :: [String]
 myWorkspaces = [wsGEN, wsWRK, wsMED, wsTMP]
@@ -186,19 +181,21 @@ myKeys conf = let
     subKeys "System"
     [ ("M-q"    , addName "Restart XMonad"             $ spawn "xmonad --restart")
     , ("M-C-q"  , addName "Recompile & restart XMonad" $ spawn "xmonad --recompile && xmonad --restart")
+    , ("M-x"    , addName "Shell prompt"               $ shellPrompt myPromptTheme)
     ]
 
     ^++^
     subKeys "Spawnables"
-    [ ("M-<Return>" , addName "Terminal"         $ spawn myTerminal)
+    [ ("M-S-<Return>" , addName "Terminal"         $ spawn myTerminal)
     , ("M-b"        , addName "Browser"          $ spawn myBrowser)
+    , ("M-e"        , addName "Emacs"            $ spawn myEditor)
     ]
 
     ^++^
     subKeys "Actions"
     [
-      ("M-p"         , addName "Take a screenshot of the current workspace"   $ spawn "~/.xmonad/scripts/xshot.sh")
-    , ("M-S-p"       , addName "Take a screenshot of the selected area"       $ spawn "~/.xmonad/scripts/xshot-select.sh")
+      ("M-a"         , addName "Take a screenshot of the current workspace"   $ spawn "~/.xmonad/scripts/xshot.sh")
+    , ("M-S-a"       , addName "Take a screenshot of the selected area"       $ spawn "~/.xmonad/scripts/xshot-select.sh")
     ]
 
 

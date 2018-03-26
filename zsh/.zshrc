@@ -1,6 +1,6 @@
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="lambda"
-plugins=(git vi autojump osx cabal sudo brew web-search history-substring-search)
+plugins=(git autojump osx sudo web-search history-substring-search ssh-agent)
 source $ZSH/oh-my-zsh.sh
 alias zshconfig="vim ~/.zshrc"
 alias chrome="open -a 'Google Chrome' --args --disable-web-security
