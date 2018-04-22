@@ -2,6 +2,7 @@ import XMonad
 
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DynamicProjects
+import XMonad.Actions.Minimize
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -20,6 +21,7 @@ import XMonad.Layout.FixedColumn
 import XMonad.Layout.LimitWindows
 import XMonad.Layout.Magnifier
 import XMonad.Layout.Minimize
+import qualified XMonad.Layout.BoringWindows as BW
 import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Renamed
@@ -36,7 +38,6 @@ import XMonad.Prompt.Workspace
 
 import qualified DBus as D
 import qualified DBus.Client as D
-import qualified XMonad.Layout.BoringWindows as B
 
 import System.Exit
 import Graphics.X11.ExtraTypes.XF86
@@ -112,10 +113,11 @@ fullDim = 12*2
 -----------------------------------------------------------------------------}}}
 -- LAYOUT                                                                    {{{
 --------------------------------------------------------------------------------
-myLayouts = renamed [CutWordsLeft 1] . avoidStruts . minimize . B.boringWindows $ myFull ||| myTile
+myLayouts = renamed [CutWordsLeft 1] . avoidStruts . minimize . BW.boringWindows $ myFull ||| myTile ||| myDev
 
 myFull = renamed [Replace "Full"] $ spacing 0 $ noBorders Full
 myTile = renamed [Replace "Main"] $ spacing mySpacing $ Tall 1 (3/100) (1/2)
+myDev  = renamed [Replace "Dev"]  $ spacing mySpacing $ Mirror $ Tall 1 (3/100) (2/3)
 
 
 
@@ -178,6 +180,16 @@ myKeys conf = let
     subKeys s ks = subtitle s : mkNamedKeymap conf ks
     in
 
+    subKeys "Windows"
+    [
+      ("M-d",   addName "Kill"                       kill)
+    , ("M-m",   addName "Minimize"                 $ withFocused minimizeWindow)
+    , ("M-S-m", addName "Restore minimized window" $ withLastMinimized maximizeWindow)
+    , ("M-g",   addName "Focus Master"             $ BW.focusMaster)
+    , ("M-<Space>", addName "Rotate layout"        $ sendMessage NextLayout)
+    ]
+
+    ^++^
     subKeys "System"
     [ ("M-q"    , addName "Restart XMonad"             $ spawn "xmonad --restart")
     , ("M-C-q"  , addName "Recompile & restart XMonad" $ spawn "xmonad --recompile && xmonad --restart")
