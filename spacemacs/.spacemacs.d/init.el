@@ -36,6 +36,7 @@ values."
             shell-default-height 30
             shell-default-position 'bottom
             shell-protect-eshell-prompt nil)
+     pdf-tools
      )
    dotspacemacs-additional-packages '(prettier-js)
    dotspacemacs-frozen-packages '()
