@@ -34,7 +34,8 @@
       (spacemacs/declare-prefix-for-mode 'rjsx-mode "mz" "folding")
       ;; key bindings
       (with-eval-after-load 'rjsx-mode
-        (define-key rjsx-mode-map (kbd "C-d") nil))
+        (define-key rjsx-mode-map ">" nil)
+        (define-key rjsx-mode-map "<" nil))
       (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode
         "w" 'js2-mode-toggle-warnings-and-errors
         "zc" 'js2-mode-hide-element
