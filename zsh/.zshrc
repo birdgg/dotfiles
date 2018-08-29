@@ -1,6 +1,6 @@
 export ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="lambda"
-plugins=(git autojump osx sudo web-search history-substring-search ssh-agent)
+ZSH_THEME="lambda-mod"
+plugins=(git autojump osx sudo web-search history-substring-search ssh-agent extract)
 source $ZSH/oh-my-zsh.sh
 alias zshconfig="vim ~/.zshrc"
 alias chrome="open -a 'Google Chrome' --args --disable-web-security
@@ -16,6 +16,8 @@ export PKG_CONFIG_PATH=/usr/local/Cellar/zlib/1.2.8/lib/pkgconfig:/usr/local/lib
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export ANDROID_SDK=/Users/birdgg/Library/Android/sdk
 export ANDROID_NDK=/Users/birdgg/Library/Android/sdk/ndk-bundle
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
