@@ -5,10 +5,11 @@ source $ZSH/oh-my-zsh.sh
 alias zshconfig="vim ~/.zshrc"
 alias chrome="open -a 'Google Chrome' --args --disable-web-security
 "
-alias p="proxychains4 -q"
 alias ec="emacsclient -nw"
 alias ect="emacsclient -c &"
 alias config='/usr/local/bin/git --git-dir=$HOME/.myconf/ --work-tree=$HOME'
+alias dr="cd ~/.emacs.d && bin/doom refresh"
+alias dc="cd ~/.emacs.d && bin/doom compile :core"
 export EDITOR='emacsclient'
 # export SPACEMACSDIR=~/my-spacemacs
 
