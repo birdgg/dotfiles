@@ -3,7 +3,7 @@ ZSH_THEME="lambda-mod"
 plugins=(git autojump osx sudo web-search history-substring-search ssh-agent extract)
 source $ZSH/oh-my-zsh.sh
 alias zshconfig="vim ~/.zshrc"
-alias chrome="open -a 'Google Chrome' --args --disable-web-security"
+alias chrome="open -a 'Google Chrome' --args --disable-web-security --user-data-dir=/Users/birdgg/chromedev"
 alias ec="emacsclient -nw"
 alias ect="emacsclient -c &"
 alias config='/usr/local/bin/git --git-dir=$HOME/.myconf/ --work-tree=$HOME'
