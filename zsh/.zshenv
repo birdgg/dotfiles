@@ -22,6 +22,6 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 export PATH=/usr/local/opt/texinfo/bin:$PATH
-export LDFLAGS=-L/usr/local/opt/texinfo/lib
+#export LDFLAGS=-L/usr/local/opt/texinfo/lib
 
 export PATH=~/.emacs.d/bin:$PATH

@@ -1,5 +1,6 @@
 export ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="lambda-mod"
+export ZSH_CUSTOM=$HOME/zsh_custom
+ZSH_THEME="cdimascio-lambda"
 plugins=(git autojump osx sudo web-search history-substring-search ssh-agent extract)
 source $ZSH/oh-my-zsh.sh
 alias zshconfig="vim ~/.zshrc"
@@ -17,6 +18,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export ANDROID_SDK=/Users/birdgg/Library/Android/sdk
 export ANDROID_NDK=/Users/birdgg/Library/Android/sdk/ndk-bundle
 export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export N_PREFIX=/Users/birdgg/node_manage
 
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
