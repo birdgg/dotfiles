@@ -9,8 +9,6 @@ export PATH=~/.local/bin:$PATH
 #pdflatex
 export PATH=$PATH:/Library/TeX/texbin
 
-# export SPACEMACSDIR=~/my-spacemacs
-
 export PATH="$PATH:`yarn global bin`"
 export PATH=$PATH:$HOME/.yarn/bin
 
