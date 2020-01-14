@@ -1,4 +1,3 @@
-export PATH=$N_PREFIX/bin:$PATH
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
 
 # cabal
@@ -9,9 +8,6 @@ export PATH=~/.local/bin:$PATH
 
 #pdflatex
 export PATH=$PATH:/Library/TeX/texbin
-
-export PATH="$PATH:`yarn global bin`"
-export PATH=$PATH:$HOME/.yarn/bin
 
 export ANDROID_HOME=~/Library/Android/sdk
 export PATH=${PATH}:${ANDROID_HOME}/tools
@@ -24,5 +20,3 @@ export PATH=/usr/local/opt/texinfo/bin:$PATH
 #export LDFLAGS=-L/usr/local/opt/texinfo/lib
 
 export PATH=~/.emacs.d/bin:$PATH
-
-

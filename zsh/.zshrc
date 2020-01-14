@@ -20,7 +20,7 @@ export ANDROID_SDK=/Users/birdgg/Library/Android/sdk
 export ANDROID_NDK=/Users/birdgg/Library/Android/sdk/ndk-bundle
 export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 export N_PREFIX=/Users/birdgg/node_manage
-
+export PATH=$N_PREFIX/bin:$PATH
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
