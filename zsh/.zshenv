@@ -1,3 +1,4 @@
+export PATH=$N_PREFIX/bin:$PATH
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
 
 # cabal
@@ -23,3 +24,5 @@ export PATH=/usr/local/opt/texinfo/bin:$PATH
 #export LDFLAGS=-L/usr/local/opt/texinfo/lib
 
 export PATH=~/.emacs.d/bin:$PATH
+
+

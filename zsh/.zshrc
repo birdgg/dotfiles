@@ -12,7 +12,7 @@ alias ect="emacsclient -c &"
 alias config='/usr/local/bin/git --git-dir=$HOME/.myconf/ --work-tree=$HOME'
 alias dr="cd ~/.emacs.d && bin/doom refresh"
 alias dc="cd ~/.emacs.d && bin/doom compile :core"
-export EDITOR='emacsclient'
+export EDITOR='vim'
 
 export PKG_CONFIG_PATH=/usr/local/Cellar/zlib/1.2.8/lib/pkgconfig:/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
