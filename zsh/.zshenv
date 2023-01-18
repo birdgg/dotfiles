@@ -23,3 +23,6 @@ export PATH=~/.emacs.d/bin:$PATH
 
 # racket
 export PATH=/Applications/Racket\ v7.6/bin:$PATH
+
+export N_PREFIX=/Users/birdgg/node_manage
+export PATH=$N_PREFIX/bin:$PATH
