@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: reducer
-# key: re
-# --
-import { combineReducers } from 'redux';
-const $1 = combineReducers({
-});
-
-export default $1;
