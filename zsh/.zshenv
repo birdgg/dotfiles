@@ -26,3 +26,5 @@ export PATH=/Applications/Racket\ v7.6/bin:$PATH
 
 export N_PREFIX=/Users/birdgg/node_manage
 export PATH=$N_PREFIX/bin:$PATH
+
+export PATH="$PATH:/Users/birdgg/.foundry/bin"

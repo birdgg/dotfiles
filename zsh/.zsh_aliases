@@ -1,0 +1,10 @@
+alias zshconfig="vim ~/.zshrc"
+alias chrome="open -a 'Google Chrome' --args --disable-web-security --user-data-dir=/Users/birdgg/chromedev"
+alias ec="emacsclient -nw"
+alias ect="emacsclient -c &"
+alias config='/usr/local/bin/git --git-dir=$HOME/.myconf/ --work-tree=$HOME'
+alias dr="cd ~/.emacs.d && bin/doom refresh"
+alias dc="cd ~/.emacs.d && bin/doom compile :core"
+alias you="yt-dlp -f bestvideo+bestaudio/best"
+alias p="pnpm"
+alias gpu="git push -u origin main"
