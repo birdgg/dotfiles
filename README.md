@@ -1,6 +1,6 @@
 # dotfiles
 
-These are my dotfiles. I use [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) shell and [stow](http://www.gnu.org/software/stow/) to manage symlinks.
+Quick setup for my computer environments
 
 ## setup
 
