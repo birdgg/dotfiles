@@ -14,3 +14,5 @@ export PATH="$PNPM_HOME:$PATH"
 
 # bun completions
 [ -s "/Users/birdgg/.bun/_bun" ] && source "/Users/birdgg/.bun/_bun"
+# Added by Windsurf - Next
+export PATH="/Users/birdgg/.codeium/windsurf/bin:$PATH"

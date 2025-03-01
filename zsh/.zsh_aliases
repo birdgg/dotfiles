@@ -16,3 +16,6 @@ alias bi="bun install"
 alias bu="bun upgrade"
 alias bt="bun test"
 alias bd="bun dev"
+
+# shadcn
+alias shad="bunx --bun shadcn@canary"
