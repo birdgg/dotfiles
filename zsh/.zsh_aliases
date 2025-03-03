@@ -2,9 +2,6 @@ alias zshconfig="vim ~/.zshrc"
 alias zshup="source $HOME/.zshrc"
 alias ec="emacsclient -nw"
 alias ect="emacsclient -c &"
-alias config='/usr/local/bin/git --git-dir=$HOME/.myconf/ --work-tree=$HOME'
-alias dr="cd ~/.emacs.d && bin/doom refresh"
-alias dc="cd ~/.emacs.d && bin/doom compile :core"
 alias you="yt-dlp -f bestvideo+bestaudio/best"
 
 # pnpm
