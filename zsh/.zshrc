@@ -1,10 +1,17 @@
-eval "$(starship init zsh)"
-
-# plugins=(git sudo history-substring-search ssh-agent extract gpg-agent)
-# zstyle :omz:plugins:ssh-agent identities github
-# source $ZSH/oh-my-zsh.sh
 source $HOME/.zsh_aliases
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
 
-export EDITOR='nvim'
+# now load zsh-syntax-highlighting plugin
 
 eval "$(zoxide init --cmd cd zsh)"
+
+[ -f "/Users/birdgg/.ghcup/env" ] && . "/Users/birdgg/.ghcup/env" # ghcup-env
+
+alias lgit='lazygit'
+
+
+# bun completions
+[ -s "/Users/birdgg/.bun/_bun" ] && source "/Users/birdgg/.bun/_bun"
+
+export GPG_TTY=$(tty)

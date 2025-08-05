@@ -17,4 +17,4 @@ alias bd="bun dev"
 # shadcn
 alias shad="bunx --bun shadcn@canary"
 
-alias plum="bash ~/plum/rime-install"
+alias plum-update="bash ~/plum/rime-install gaboolic/rime-frost:others/recipes/full"
