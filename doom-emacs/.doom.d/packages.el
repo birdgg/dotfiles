@@ -50,8 +50,7 @@
 
 (package! catppuccin-theme)
 
-(package! lsp-haskell)
-(package! haskell-ts-mode)
-
 (package! claude-code-ide
   :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
+
+(package! verb)

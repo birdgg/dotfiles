@@ -30,9 +30,6 @@ style = "bold lavender"
 [docker_context]
 symbol = " "
 
-[elixir]
-symbol = " "
-
 [elm]
 symbol = " "
 
@@ -47,9 +44,6 @@ tag_symbol = '  '
 
 [golang]
 symbol = " "
-
-[guix_shell]
-symbol = " "
 
 [haskell]
 symbol = " "

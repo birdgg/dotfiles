@@ -15,8 +15,8 @@
 ;;      directory (for easy access to its source code).
 
 ;; Must put it here, https://github.com/d12frosted/homebrew-emacs-plus/issues/584
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-to-list 'default-frame-alist '(undecorated . t))
+;;(add-to-list 'default-frame-alist '(fullscreen . fullscreen))
+;;(add-to-list 'default-frame-alist '(undecorated . t))
 
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
@@ -30,7 +30,7 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
-       (vertico +icons)           ; the search engine of the future
+       (vertico +icons +childframe)           ; the search engine of the future
 
        :ui
        ;;deft              ; notational velocity for Emacs
@@ -48,7 +48,7 @@
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        ;;smooth-scroll     ; So smooth you won't believe it's not butter
-       tabs              ; a tab bar for Emacs
+       ;; tabs              ; a tab bar for Emacs
        ;;treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        (vc-gutter +pretty) ; vcs diff in the fringe
@@ -101,7 +101,7 @@
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
-       lsp               ; M-x vscode
+       (lsp +peek)              ; M-x vscode
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -150,10 +150,10 @@
        (markdown +grip)          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
-       (org +gnuplot +pomodoro +roam2 +journal +dragndrop)               ; organize your plain life in plain text
+       (org +gnuplot +pomodoro +roam2 +journal +dragndrop +pretty)               ; organize your plain life in plain text
        ;;plantuml          ; diagrams for confusing people more
        ;;graphviz          ; diagrams for confusing yourself even more
-       ;;purescript        ; javascript, but functional
+       purescript        ; javascript, but functional
        ;;python            ; beautiful is better than ugly
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6

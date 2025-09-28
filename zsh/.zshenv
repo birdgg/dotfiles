@@ -11,7 +11,7 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # N
-export N_PREFIX=/Users/birdgg/node_manage
+export N_PREFIX="$HOME/n"
 export PATH=$N_PREFIX/bin:$PATH
 
 # Foundry
