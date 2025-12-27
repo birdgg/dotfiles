@@ -47,5 +47,9 @@
     "context7@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "worktree-task@worktree-task-plugin": true
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); dir=$(echo \"$cwd\" | awk -F'/' '{n=NF-3; if(n<1) n=1; path=\"\"; for(i=n;i<=NF;i++) {if(i>n) path=path\"/\"; path=path$i;} if(n>1) path=\"…/\"path; print path;}'); branch=$(git -C \"$cwd\" -c core.useBuiltinFSMonitor=false -c core.fsmonitor=false branch --show-current 2>/dev/null || git -C \"$cwd\" -c core.useBuiltinFSMonitor=false -c core.fsmonitor=false rev-parse --short HEAD 2>/dev/null); model=$(echo \"$input\" | jq -r '.model.display_name'); usage=$(echo \"$input\" | jq '.context_window.current_usage'); ctx=''; if [ \"$usage\" != \"null\" ]; then current=$(echo \"$usage\" | jq '.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens'); size=$(echo \"$input\" | jq '.context_window.context_window_size'); pct=$((current * 100 / size)); ctx=$(printf ' \\033[38;2;249;226;175m󱫋 %d%%\\033[0m' \"$pct\"); fi; cost=$(echo \"$input\" | jq -r '.total_cost_usd // empty'); cost_str=''; if [ -n \"$cost\" ]; then cost_str=$(printf ' \\033[38;2;166;227;161m$ %.3f\\033[0m' \"$cost\"); fi; printf '\\033[38;2;180;190;254m%s\\033[0m' \"$dir\"; [ -n \"$branch\" ] && printf ' \\033[38;2;203;166;247m %s\\033[0m' \"$branch\"; printf ' \\033[38;2;116;199;236m󰧑 %s\\033[0m' \"$model\"; printf '%s%s' \"$ctx\" \"$cost_str\""
   }
 }
