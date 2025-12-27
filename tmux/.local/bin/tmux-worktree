@@ -1,0 +1,273 @@
+#!/usr/bin/env bun
+/**
+ * tmux-worktree: 创建 git worktree 并在新 tmux session 中打开，自动运行 Claude Code
+ *
+ * 用法:
+ *   tmux-worktree <branch>              # 基于现有分支创建 worktree
+ *   tmux-worktree -b <branch>           # 创建新分支的 worktree
+ *   tmux-worktree <branch> --no-claude  # 不自动运行 cl
+ *   tmux-worktree finish                # 合并回主分支并清理
+ */
+
+import { $ } from "bun";
+import { parseArgs } from "util";
+
+$.throws(false);
+
+// ===== 工具函数 =====
+
+async function run(cmd: string[]): Promise<{ ok: boolean; stdout: string }> {
+  const proc = Bun.spawn(cmd, { stdout: "pipe", stderr: "inherit" });
+  const stdout = await new Response(proc.stdout).text();
+  const exitCode = await proc.exited;
+  return { ok: exitCode === 0, stdout: stdout.trim() };
+}
+
+async function runCheck(cmd: string[]): Promise<string> {
+  const { ok, stdout } = await run(cmd);
+  if (!ok) {
+    console.error(`命令失败: ${cmd.join(" ")}`);
+    process.exit(1);
+  }
+  return stdout;
+}
+
+// ===== Git 函数 =====
+
+async function getProjectRoot(): Promise<string> {
+  return runCheck(["git", "rev-parse", "--show-toplevel"]);
+}
+
+async function getProjectName(): Promise<string> {
+  const root = await getProjectRoot();
+  return root.split("/").pop()!;
+}
+
+async function getMainBranch(): Promise<string> {
+  const { ok, stdout } = await run([
+    "git",
+    "symbolic-ref",
+    "refs/remotes/origin/HEAD",
+  ]);
+  if (ok) {
+    return stdout.split("/").pop()!;
+  }
+
+  // 回退: 检查 main 或 master
+  for (const branch of ["main", "master"]) {
+    const { ok } = await run([
+      "git",
+      "show-ref",
+      "--verify",
+      `refs/heads/${branch}`,
+    ]);
+    if (ok) return branch;
+  }
+  return "main";
+}
+
+async function getCurrentBranch(): Promise<string> {
+  return runCheck(["git", "rev-parse", "--abbrev-ref", "HEAD"]);
+}
+
+async function getWorktreePath(project: string, branch: string): Promise<string> {
+  const root = await getProjectRoot();
+  const parent = root.split("/").slice(0, -1).join("/");
+  const safeBranch = branch.replace(/\//g, "-");
+  return `${parent}/worktrees/${project}-${safeBranch}`;
+}
+
+async function getMainRepoPath(): Promise<string> {
+  const { stdout } = await run(["git", "worktree", "list", "--porcelain"]);
+  const lines = stdout.split("\n");
+  for (const line of lines) {
+    if (line.startsWith("worktree ")) {
+      return line.slice(9);
+    }
+  }
+  return getProjectRoot();
+}
+
+async function isWorktree(): Promise<boolean> {
+  const gitDir = await runCheck(["git", "rev-parse", "--git-dir"]);
+  return gitDir.includes(".git/worktrees");
+}
+
+async function worktreeExists(path: string): Promise<boolean> {
+  const file = Bun.file(path);
+  return file.exists();
+}
+
+// ===== Tmux 函数 =====
+
+async function sessionExists(name: string): Promise<boolean> {
+  const { ok } = await run(["tmux", "has-session", "-t", name]);
+  return ok;
+}
+
+function getCurrentSession(): string | null {
+  if (!process.env.TMUX) return null;
+  const result = Bun.spawnSync(["tmux", "display-message", "-p", "#S"]);
+  if (result.exitCode === 0) {
+    return new TextDecoder().decode(result.stdout).trim();
+  }
+  return null;
+}
+
+// ===== 命令 =====
+
+async function cmdCreate(branch: string, newBranch: boolean, noClaude: boolean) {
+  // 检查是否在 git 仓库中
+  const { ok } = await run(["git", "rev-parse", "--git-dir"]);
+  if (!ok) {
+    console.error("错误: 不在 git 仓库中");
+    process.exit(1);
+  }
+
+  const project = await getProjectName();
+  const wtPath = await getWorktreePath(project, branch);
+  const safeBranch = branch.replace(/\//g, "-");
+  const sessionName = `${project}-${safeBranch}`;
+
+  // 创建或使用现有 worktree
+  if (!(await worktreeExists(wtPath))) {
+    await $`mkdir -p ${wtPath.split("/").slice(0, -1).join("/")}`;
+
+    if (newBranch) {
+      await $`git worktree add -b ${branch} ${wtPath}`;
+    } else {
+      await $`git worktree add ${wtPath} ${branch}`;
+    }
+    console.log(`✓ Worktree 已创建: ${wtPath}`);
+  } else {
+    console.log(`✓ Worktree 已存在: ${wtPath}`);
+  }
+
+  // 创建 tmux session
+  if (await sessionExists(sessionName)) {
+    console.log(`Session '${sessionName}' 已存在，正在附加...`);
+    await $`tmux attach-session -t ${sessionName}`;
+    return;
+  }
+
+  await $`tmux new-session -d -s ${sessionName} -c ${wtPath}`;
+  await $`tmux split-window -h -c ${wtPath}`;
+
+  if (!noClaude) {
+    await $`tmux select-pane -L`;
+    await $`tmux send-keys cl C-m`;
+    await $`tmux select-pane -R`;
+    await $`tmux send-keys cl C-m`;
+    await $`tmux select-pane -L`;
+  }
+
+  await $`tmux attach-session -t ${sessionName}`;
+}
+
+async function cmdFinish() {
+  // 检查是否在 worktree 中
+  if (!(await isWorktree())) {
+    console.error("错误: 不在 worktree 中，请在 worktree 目录中运行此命令");
+    process.exit(1);
+  }
+
+  const currentBranch = await getCurrentBranch();
+  const mainBranch = await getMainBranch();
+  const mainRepo = await getMainRepoPath();
+  const currentPath = process.cwd();
+  const sessionName = getCurrentSession();
+
+  console.log(`分支: ${currentBranch}`);
+  console.log(`主分支: ${mainBranch}`);
+  console.log(`主仓库: ${mainRepo}`);
+  console.log();
+
+  // 检查是否有未提交的更改
+  const { stdout: status } = await run(["git", "status", "--porcelain"]);
+  if (status) {
+    console.error("错误: 有未提交的更改，请先提交或 stash");
+    console.log(status);
+    process.exit(1);
+  }
+
+  // 切换到主仓库并合并
+  process.chdir(mainRepo);
+
+  console.log(`正在切换到 ${mainBranch}...`);
+  await runCheck(["git", "checkout", mainBranch]);
+
+  console.log(`正在拉取最新代码...`);
+  await run(["git", "pull"]);
+
+  console.log(`正在合并 ${currentBranch}...`);
+  const { ok: mergeOk } = await run([
+    "git",
+    "merge",
+    currentBranch,
+    "-m",
+    `Merge branch '${currentBranch}'`,
+  ]);
+
+  if (!mergeOk) {
+    console.error("错误: 合并失败，请手动解决冲突");
+    process.exit(1);
+  }
+
+  console.log(`✓ 已合并 ${currentBranch} 到 ${mainBranch}`);
+
+  // 删除 worktree
+  console.log(`正在删除 worktree...`);
+  await $`git worktree remove ${currentPath} --force`;
+  console.log(`✓ Worktree 已删除`);
+
+  // 删除分支
+  console.log(`正在删除分支 ${currentBranch}...`);
+  await $`git branch -d ${currentBranch}`;
+  console.log(`✓ 分支已删除`);
+
+  // 关闭 tmux session
+  if (sessionName) {
+    console.log(`正在关闭 session ${sessionName}...`);
+    await run(["tmux", "kill-session", "-t", sessionName]);
+    console.log(`✓ Session 已关闭`);
+  }
+
+  console.log();
+  console.log("🎉 完成！已合并并清理");
+}
+
+// ===== Main =====
+
+const { values, positionals } = parseArgs({
+  args: Bun.argv.slice(2),
+  options: {
+    "new-branch": { type: "boolean", short: "b", default: false },
+    "no-claude": { type: "boolean", default: false },
+    help: { type: "boolean", short: "h", default: false },
+  },
+  allowPositionals: true,
+});
+
+if (values.help) {
+  console.log(`
+tmux-worktree: 创建 git worktree 并在新 tmux session 中打开
+
+用法:
+  tmux-worktree <branch>              基于现有分支创建 worktree
+  tmux-worktree -b <branch>           创建新分支的 worktree
+  tmux-worktree <branch> --no-claude  不自动运行 Claude Code
+  tmux-worktree finish                合并回主分支并清理
+`);
+  process.exit(0);
+}
+
+const command = positionals[0];
+
+if (command === "finish") {
+  await cmdFinish();
+} else if (command) {
+  await cmdCreate(command, values["new-branch"]!, values["no-claude"]!);
+} else {
+  console.error("用法: tmux-worktree <branch> 或 tmux-worktree finish");
+  process.exit(1);
+}

@@ -21,6 +21,8 @@ alias lgit='lazygit'
 # bun completions
 [ -s "/Users/birdgg/.bun/_bun" ] && source "/Users/birdgg/.bun/_bun"
 
+# Claude
+alias cl="claude --dangerously-skip-permissions"
 
 # Codex
 alias cu="npm i -g @openai/codex"

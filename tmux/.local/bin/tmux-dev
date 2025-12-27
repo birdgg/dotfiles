@@ -1,5 +1,5 @@
 #!/bin/bash
-# tmux-dev: 启动带有双分割面板的 tmux 会话
+# tmux-dev: 启动带有双分割面板的 tmux 会话，自动运行 Claude Code
 # 用法: tmux-dev [session-name] [directory]
 
 SESSION_NAME="${1:-dev}"
@@ -14,6 +14,16 @@ fi
 # 创建新会话，带有两个水平分割的面板
 tmux new-session -d -s "$SESSION_NAME" -c "$WORK_DIR"
 tmux split-window -h -c "$WORK_DIR"
+
+# 左侧面板运行 cl
+tmux select-pane -L
+tmux send-keys "cl" C-m
+
+# 右侧面板运行 cl
+tmux select-pane -R
+tmux send-keys "cl" C-m
+
+# 回到左侧面板
 tmux select-pane -L
 
 # 附加到会话
