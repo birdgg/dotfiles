@@ -131,12 +131,19 @@ async function cmdCreate(branch: string, newBranch: boolean, noClaude: boolean) 
 
   // 创建或使用现有 worktree
   if (!(await worktreeExists(wtPath))) {
-    await $`mkdir -p ${wtPath.split("/").slice(0, -1).join("/")}`;
+    const parentDir = wtPath.split("/").slice(0, -1).join("/");
+    await $`mkdir -p ${parentDir}`;
 
+    let result;
     if (newBranch) {
-      await $`git worktree add -b ${branch} ${wtPath}`;
+      result = await $`git worktree add -b ${branch} ${wtPath}`;
     } else {
-      await $`git worktree add ${wtPath} ${branch}`;
+      result = await $`git worktree add ${wtPath} ${branch}`;
+    }
+
+    if (result.exitCode !== 0) {
+      console.error(`错误: 无法创建 worktree`);
+      process.exit(1);
     }
     console.log(`✓ Worktree 已创建: ${wtPath}`);
   } else {
@@ -151,14 +158,14 @@ async function cmdCreate(branch: string, newBranch: boolean, noClaude: boolean) 
   }
 
   await $`tmux new-session -d -s ${sessionName} -c ${wtPath}`;
-  await $`tmux split-window -h -c ${wtPath}`;
+  await $`tmux split-window -h -t ${sessionName} -c ${wtPath}`;
 
   if (!noClaude) {
-    await $`tmux select-pane -L`;
-    await $`tmux send-keys cl C-m`;
-    await $`tmux select-pane -R`;
-    await $`tmux send-keys cl C-m`;
-    await $`tmux select-pane -L`;
+    await $`tmux select-pane -t ${sessionName} -L`;
+    await $`tmux send-keys -t ${sessionName} "cd ${wtPath} && cl" C-m`;
+    await $`tmux select-pane -t ${sessionName} -R`;
+    await $`tmux send-keys -t ${sessionName} "cd ${wtPath} && cl" C-m`;
+    await $`tmux select-pane -t ${sessionName} -L`;
   }
 
   await $`tmux attach-session -t ${sessionName}`;
