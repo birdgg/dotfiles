@@ -18,12 +18,15 @@ tmux new-session -d -s "$SESSION_NAME" -c "$WORK_DIR"
 
 case "$MODE" in
     hx)
-        # Helix 2/3 + Claude Code 1/3
+        # Helix 2/3 + Claude Code 1/3 (上) + Terminal (下)
         tmux split-window -h -p 33 -c "$WORK_DIR"
         tmux select-pane -L
         tmux send-keys "hx ." C-m
         tmux select-pane -R
         tmux send-keys "cl" C-m
+        # 在 Claude Code 下面添加终端
+        tmux split-window -v -p 30 -c "$WORK_DIR"
+        tmux select-pane -U
         tmux select-pane -L
         ;;
     dual)
