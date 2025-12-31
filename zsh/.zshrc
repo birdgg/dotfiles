@@ -4,7 +4,7 @@ source $HOME/.zsh_aliases
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
 
-# eval "$(zoxide init --cmd cd zsh)"
+eval "$(zoxide init --cmd cd zsh)"
 
 [ -f "/Users/birdgg/.ghcup/env" ] && . "/Users/birdgg/.ghcup/env" # ghcup-env
 
@@ -30,3 +30,6 @@ alias cu="npm i -g @openai/codex"
 alias cc="bunx ccusage"
 
 kp() { lsof -ti:$1 | xargs kill -9 }
+
+# Added by Antigravity
+export PATH="/Users/birdgg/.antigravity/antigravity/bin:$PATH"
