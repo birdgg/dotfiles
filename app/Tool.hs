@@ -131,7 +131,10 @@ toolFor Infuse =
     Tool
         { toolDisplayName = "Infuse"
         , toolCheck = doesDirectoryExist "/Applications/Infuse.app"
-        , toolInstall = system "mas install 1136220934"
+        , toolInstall =
+            system $
+                "(command -v mas || brew install mas)"
+                    ++ " && mas install 1136220934"
         , toolStowPackage = Nothing
         }
 
