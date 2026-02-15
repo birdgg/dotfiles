@@ -27,7 +27,6 @@ This is a macOS dotfiles repository using **GNU Stow** for symlink management.
 
 **Config directories** (each stows to `$HOME`):
 - `zsh/` - Shell config (.zshrc, .zshenv, .zsh_aliases)
-- `starship/` - Prompt config (.config/starship.toml)
 - `ghostty/` - Terminal config (.config/ghostty/)
 - `doom-emacs/` - Editor config (.doom.d/)
 

@@ -1,7 +1,0 @@
-inherits = "catppuccin_mocha"
-
-["ui.background"]
-bg = ""
-
-["comment"]
-fg = "overlay1"

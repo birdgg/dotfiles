@@ -1,9 +1,0 @@
-background-opacity = 0.80
-alpha-blending = linear
-background-image = /Users/birdgg/Pictures/iku/kano.png
-background-image-opacity = 0.5
-background-image-position = bottom-right
-background-image-fit = contain
-font-family = "Google Sans Code NF"
-font-size = 17
-bell-features=system
