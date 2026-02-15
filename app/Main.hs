@@ -12,8 +12,10 @@ import Tool
 
 -- CLI commands
 
+data InstallTarget = One ToolName | All
+
 data Command
-    = Install (Maybe ToolName)
+    = Install (Maybe InstallTarget)
     | List
 
 -- CLI parsing
@@ -26,23 +28,25 @@ parseCommand =
         )
 
 installParser :: Parser Command
-installParser = Install <$> optional (argument readToolName (metavar "TOOL" <> help availableToolsHelp))
+installParser = Install <$> optional (argument readInstallTarget (metavar "TOOL" <> help availableToolsHelp))
 
-readToolName :: ReadM ToolName
-readToolName = eitherReader $ \s ->
-    case lookup s nameMap of
-        Just name -> Right name
-        Nothing ->
-            Left $
-                "Unknown tool: "
-                    ++ s
-                    ++ "\nAvailable: "
-                    ++ intercalate ", " (map toolNameStr allToolNames)
+readInstallTarget :: ReadM InstallTarget
+readInstallTarget = eitherReader $ \s ->
+    case s of
+        "all" -> Right All
+        _ -> case lookup s nameMap of
+            Just name -> Right (One name)
+            Nothing ->
+                Left $
+                    "Unknown tool: "
+                        ++ s
+                        ++ "\nAvailable: all, "
+                        ++ intercalate ", " (map toolNameStr allToolNames)
   where
     nameMap = map (\n -> (toolNameStr n, n)) allToolNames
 
 availableToolsHelp :: String
-availableToolsHelp = "Tool to install: " ++ intercalate ", " (map toolNameStr allToolNames)
+availableToolsHelp = "Tool to install: all, " ++ intercalate ", " (map toolNameStr allToolNames)
 
 opts :: ParserInfo Command
 opts =
@@ -60,8 +64,14 @@ main = do
     cmd <- execParser opts
     case cmd of
         Install Nothing -> installInteractive
-        Install (Just tool) -> installTool tool
+        Install (Just All) -> installAll
+        Install (Just (One tool)) -> installTool tool
         List -> listTools
+
+installAll :: IO ()
+installAll = do
+    putStrLn $ "Installing all " ++ show (length allToolNames) ++ " tool(s)...\n"
+    forM_ allToolNames installTool
 
 installInteractive :: IO ()
 installInteractive = do
