@@ -15,7 +15,7 @@ alias bd="bun dev"
 # shadcn
 alias shad="bunx --bun shadcn@canary"
 
-alias plum-update="bash ~/plum/rime-install gaboolic/rime-frost:others/recipes/full"
+alias plum-update="bash ~/plum/rime-install amzxyz/rime_wanxiang@wanxiang-base:plum/full"
 
 # Claude Code
 alias cl="claude --dangerously-skip-permissions"

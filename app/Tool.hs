@@ -8,11 +8,11 @@ module Tool
     ) where
 
 import Data.Maybe (isJust)
-import System.Directory (doesDirectoryExist, findExecutable, getCurrentDirectory)
+import System.Directory (doesDirectoryExist, doesFileExist, findExecutable, getCurrentDirectory, getHomeDirectory)
 import System.Exit (ExitCode (..))
 import System.Process (system)
 
-data ToolName = Brew | Zsh | Gpg | Tmux | Bun | Ghostty | Claude | Codex | Haskell | Infuse | Rust | Chrome | OnePassword | VSCode | Telegram | Zed | Discord | OrbStack | ClashX
+data ToolName = Brew | Zsh | Gpg | Tmux | Bun | Ghostty | Claude | Codex | Haskell | Infuse | Rust | Chrome | OnePassword | VSCode | Telegram | Zed | Discord | OrbStack | ClashX | Squirrel
     deriving (Show, Eq, Bounded, Enum)
 
 data Tool = Tool
@@ -45,6 +45,7 @@ toolNameStr Zed = "zed"
 toolNameStr Discord = "discord"
 toolNameStr OrbStack = "orbstack"
 toolNameStr ClashX = "clashx"
+toolNameStr Squirrel = "squirrel"
 
 toolFor :: ToolName -> Tool
 toolFor Brew =
@@ -204,6 +205,22 @@ toolFor ClashX =
                     ++ " && mv '/tmp/ClashX.Meta/ClashX Meta.app' /Applications/"
                     ++ " && rm -rf /tmp/ClashX.Meta /tmp/ClashX.Meta.zip"
         , toolStowPackage = Nothing
+        }
+
+toolFor Squirrel =
+    Tool
+        { toolDisplayName = "Squirrel (万象拼音)"
+        , toolCheck = do
+            home <- getHomeDirectory
+            squirrelOk <- doesDirectoryExist "/Library/Input Methods/Squirrel.app"
+            wanxiangOk <- doesFileExist (home ++ "/Library/Rime/wanxiang.schema.yaml")
+            pure (squirrelOk && wanxiangOk)
+        , toolInstall =
+            system $
+                "brew install --cask squirrel"
+                    ++ " && (test -d ~/plum || git clone --depth 1 https://github.com/rime/plum.git ~/plum)"
+                    ++ " && bash ~/plum/rime-install amzxyz/rime_wanxiang@wanxiang-base:plum/full"
+        , toolStowPackage = Just "squirrel"
         }
 
 commandExists :: String -> IO Bool
