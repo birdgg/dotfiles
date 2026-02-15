@@ -1,7 +1,5 @@
 alias zconfig="vim ~/.zshrc"
 alias zup="source $HOME/.zshrc"
-alias ec="emacsclient -nw"
-alias ect="emacsclient -c &"
 alias you="yt-dlp -f bestvideo+bestaudio/best"
 
 # pnpm
@@ -18,3 +16,6 @@ alias bd="bun dev"
 alias shad="bunx --bun shadcn@canary"
 
 alias plum-update="bash ~/plum/rime-install gaboolic/rime-frost:others/recipes/full"
+
+# Claude Code
+alias cl="claude --dangerously-skip-permissions"

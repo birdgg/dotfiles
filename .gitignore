@@ -1,1 +1,3 @@
 .DS_Store
+dist-newstyle/
+gpg_key/private.asc
