@@ -1,7 +1,7 @@
 background-opacity = 0.98
 alpha-blending = linear
 theme = catppuccin-mocha.conf
-background-image = /Users/birdgg/Pictures/iku/kano.png
+background-image = ~/.config/ghostty/images/kano.png
 background-image-opacity = 0.2
 background-image-position = bottom-right
 background-image-fit = contain
